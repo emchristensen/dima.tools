@@ -17,9 +17,9 @@ check.code <- function(code,
 
   # If it wasn't a valid code, then just assign everything to NULL
   if (!valid) {
-    growthhabit <- NULL
-    growthhabitsub <- NULL
-    duration <- NULL
+    growthhabit <- NA
+    growthhabitsub <- NA
+    duration <- NA
   } else {
     # Check to see if it starts with one of our woody prefixes
     if (grepl(code, pattern = "^(SH|TR)")) {
@@ -207,7 +207,7 @@ gather.lpi <- function(dima.tables,
     # Which codes don't show up in the species characteristics table?
     unaccounted.codes <- unique(lpi.tall$code[!(lpi.tall$code %in% species$SpeciesCode)])
     # Make a data frame of the result of running those through check.code()
-    unknowns.df <- dplyr::bind_rows(lapply(lapply(unaccounted.codes, check.code), data.frame))
+    unknowns.df <- suppressWarnings(dplyr::bind_rows(lapply(lapply(unaccounted.codes, check.code), data.frame)))
     # Slice that to only the ones that were valid unknown codes
     unknowns.df <- unknowns.df[unknowns.df$Valid,]
     # Smash those into the species table
